@@ -20,6 +20,8 @@ router.get('/file/list/:dir(*)', function(req,res,next){
 	
 //			f = files;	
  //			console.log(f);			
+			var ReturnObject = new Object();
+			ReturnObject.isList = true;
 			var dirArray= new Array( );
 			files.forEach(file => {	
 				stats= fs.statSync(searchPath+'/'+file);
@@ -33,13 +35,37 @@ router.get('/file/list/:dir(*)', function(req,res,next){
 				dirArray.push(item);
 				
   			});
-	 		res.json(dirArray);
+			ReturnObject.list = dirArray;
+	 		res.json(ReturnObject);
 		}
 		else
-		{	
+		{
+			stats= fs.statSync(searchPath);
+			if(stats)
+			{
+				var ReturnObject = new Object();
+	                        ReturnObject.isList = false;
+        	                var dirArray= new Array( );
+                	       
+                  
+                            	var item = new Object();
+                                item.path ='/'+dir;
+                                item.isDir = stats.isDirectory();
+                                item.name = stats.name;
+                                item.size = stats.size;
+                                item.createTime=stats.birthtime;
+                                dirArray.push(item);
+
+                        
+                        ReturnObject.list = dirArray;
+                        res.json(ReturnObject);				
+
+
+			}else{	
 			var err = new Error('Not Found');
   			err.status = 404;
   			next(err);
+			}
 		}
 	});
 	console.log(f);
