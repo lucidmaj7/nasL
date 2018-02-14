@@ -17,17 +17,13 @@ router.get('/file/list/:dir(*)', function(req,res,next){
 	fs.readdir(searchPath, (err, files) => {
 		if(files)
 		{	
-	
-//			f = files;	
- //			console.log(f);			
-			var ReturnObject = new Object();
-			ReturnObject.isList = true;
+
 			var dirArray= new Array( );
 			files.forEach(file => {	
 				stats= fs.statSync(searchPath+'/'+file);
     				console.log(file);
 				var item = new Object();
-				item.path ='/'+dir+'/'+file;
+				item.path = "/"+dir+'/'+file;
 				item.isDir = stats.isDirectory();
 				item.name = file;
 				item.size = stats.size;
@@ -35,30 +31,22 @@ router.get('/file/list/:dir(*)', function(req,res,next){
 				dirArray.push(item);
 				
   			});
-			ReturnObject.list = dirArray;
-	 		res.json(ReturnObject);
+	 		res.json(dirArray);
 		}
 		else
 		{
 			stats= fs.statSync(searchPath);
 			if(stats)
 			{
-				var ReturnObject = new Object();
-	                        ReturnObject.isList = false;
-        	                var dirArray= new Array( );
-                	       
-                  
-                            	var item = new Object();
-                                item.path ='/'+dir;
-                                item.isDir = stats.isDirectory();
-                                item.name = stats.name;
-                                item.size = stats.size;
-                                item.createTime=stats.birthtime;
-                                dirArray.push(item);
-
-                        
-                        ReturnObject.list = dirArray;
-                        res.json(ReturnObject);				
+                var dirArray= new Array( );
+            	var item = new Object();
+                item.path ="/"+ dir;
+                item.isDir = stats.isDirectory();
+                item.name = stats.name;
+                item.size = stats.size;
+                item.createTime=stats.birthtime;
+                dirArray.push(item);
+                res.json(dirArray);				
 
 
 			}else{	

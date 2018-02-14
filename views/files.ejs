@@ -23,41 +23,47 @@
     <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 	<script>
 		function showFileList(filelist)
-                {
-                        var files =JSON.stringify(filelist);
-                        console.log(files);
+    {
+            var files =JSON.stringify(filelist);
+            console.log(files);
 //			
-			for(var i =0;i< filelist.length;i++)
-			{		
-				var item = filelist[i];
-				var link = encodeURI('/files'+item.path);
-				var size;
-				if(item.isDir)
-					size = "";
-				else
-					size = item.size;
-				var appendRow = '<tr>';
-				appendRow+='<td><a href='+link+'>'+item.name+'</a></td>';
-				appendRow+='<td>'+size+'</td>';
-				appendRow+='<td>'+item.createTime+'</td>';
-				appendRow+='</tr>';			
-				 $('#filelistTable').append(appendRow);
-			}
-                }
+        		for(var i =0;i< filelist.length;i++)
+        		{		
+        			var item = filelist[i];
+        			var link = encodeURI('/files'+item.path);
+        			var size;
+        			if(item.isDir)
+        				size = "";
+        			else
+        				size = item.size;
+        			var appendRow = '<tr>';
+        			appendRow+='<td><a href='+link+'>'+item.name+'</a></td>';
+        			appendRow+='<td>'+size+'</td>';
+        			appendRow+='<td>'+item.createTime+'</td>';
+        			appendRow+='</tr>';			
+        			 $('#filelistTable').append(appendRow);
+        		}
+    }
 		$(document).ready(function(){	
+      var reqPath = "<%-title%>";
+
 			$.ajax({      
 		        type:"GET",  
-		        url:'/api/file/list/'+'<%-title%>',      
+		        url:'/api/file/list'+reqPath,      
 		              
 		        success:function(args, type){
-				if(args.isList)        
-					showFileList(args.list);
-				else
-				{
-
-					window.location.assign('/api/file/download'+args.list[0].path);
-				//	window.close();
-				}
+          if(args.length==1 )
+          {
+            if(args[0].isDir == false)
+            {  
+              window.location.assign('/api/file/download/'+args[0].path);
+              return;
+            }
+            
+          }
+             
+					 showFileList(args);
+           return;
 				
 				}, 
         		error:function(e){  
