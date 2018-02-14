@@ -11,9 +11,11 @@ router.get('/file', function(req, res, next) {
 });
 
 router.get('/file/list/:dir(*)', function(req,res,next){
+	console.log("api file list == " +req.params.dir);
 	var dir = req.params.dir;
+	dir = "/"+dir;
 	var f;
-	var searchPath = '/hdd/'+dir;
+	var searchPath = '/hdd'+dir;
 	fs.readdir(searchPath, (err, files) => {
 		if(files)
 		{	
@@ -23,7 +25,10 @@ router.get('/file/list/:dir(*)', function(req,res,next){
 				stats= fs.statSync(searchPath+'/'+file);
     				console.log(file);
 				var item = new Object();
-				item.path = "/"+dir+'/'+file;
+				var path = dir+'/'+file;
+				var resultPath=	path.replace( /\/\//gi, '/');
+				console.log("path "+resultPath);
+				item.path = resultPath;
 				item.isDir = stats.isDirectory();
 				item.name = file;
 				item.size = stats.size;
@@ -40,7 +45,7 @@ router.get('/file/list/:dir(*)', function(req,res,next){
 			{
                 var dirArray= new Array( );
             	var item = new Object();
-                item.path ="/"+ dir;
+                item.path = dir;
                 item.isDir = stats.isDirectory();
                 item.name = stats.name;
                 item.size = stats.size;
