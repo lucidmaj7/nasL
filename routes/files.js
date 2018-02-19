@@ -7,8 +7,8 @@ router.get('/', function(req, res, next) {
 	if(!req.session)
 	{
 		console.log("session is not");
-		res.redirect(403,'/login' );
-		return;
+	//	res.redirect(403,'/login' );
+	//	return;
 	}
 	console.log("1111");
 	res.render('files', { title: "/" });

@@ -32,8 +32,7 @@
           var dot ="" ;
           for(var j = 1;j<=i; j++)
           {
-           // if(j!=1)
-              dot+="/";
+            dot+="/";
             dot+=(dirArray[j]);
           }
           pathTag += "/<a href='"+dot+"''>"+String(dirArray[i])+"</a>";
@@ -55,9 +54,17 @@
         			var link = encodeURI('/files'+item.path);
         			var size;
         			if(item.isDir)
-        				size = "";
+        			{	
+					size = "";
+				
+				}
         			else
-        				size = item.size;
+        			{	
+					size = item.size;
+					 link = encodeURI('/api/file/download'+item.path);
+	
+						
+				}
         			var appendRow = '<tr>';
         			appendRow+='<td><a href='+link+'>'+item.name+'</a></td>';
         			appendRow+='<td>'+size+'</td>';
@@ -74,17 +81,7 @@
 		        url:'/api/file/list'+reqPath,      
 		              
 		        success:function(args, type){
-          if(args.length==1 )
-          {
-            if(args[0].isDir == false)
-            {  
-              window.location.assign('/api/file/download'+args[0].path);
-              showDirPath(reqPath);
-              return;
-            }
-            
-          }
-          
+         
 					 showFileList(args);
            showDirPath(reqPath);
 
